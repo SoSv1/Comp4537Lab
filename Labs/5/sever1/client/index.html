@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Server 1 — Database</title>
+    <style>
+      body {
+        max-width: 760px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        font: 1rem/1.5 system-ui, sans-serif;
+      }
+
+      section {
+        margin: 2rem 0;
+      }
+
+      textarea {
+        box-sizing: border-box;
+        display: block;
+        width: 100%;
+        min-height: 8rem;
+        margin: 0.5rem 0;
+        font: 0.95rem/1.4 ui-monospace, monospace;
+      }
+
+      pre {
+        overflow: auto;
+        padding: 1rem;
+        background: #f3f4f6;
+        white-space: pre-wrap;
+      }
+
+      button {
+        padding: 0.45rem 0.8rem;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Server 1 — Database</h1>
+
+    <section aria-labelledby="insert-heading">
+      <h2 id="insert-heading">Insert rows</h2>
+      <p>Each click inserts the sample rows again; existing rows are kept.</p>
+      <button id="insert-button" type="button">Insert</button>
+      <pre id="insert-response" aria-live="polite">No insert request yet.</pre>
+    </section>
+
+    <section aria-labelledby="query-heading">
+      <h2 id="query-heading">Read table data</h2>
+      <label for="sql-query">SQL query (read-only)</label>
+      <textarea id="sql-query">SELECT * FROM records;</textarea>
+      <button id="query-button" type="button">Submit query</button>
+      <pre id="query-response" aria-live="polite">No query submitted yet.</pre>
+    </section>
+
+    <script>
+      const API_BASE_URL = 'https://cmorris.xyz/COMP4537/labs/5';
+      const insertButton = document.getElementById('insert-button');
+      const insertResponse = document.getElementById('insert-response');
+      const queryButton = document.getElementById('query-button');
+      const queryResponse = document.getElementById('query-response');
+      const sqlInput = document.getElementById('sql-query');
+
+      insertButton.addEventListener('click', async () => {
+        insertResponse.textContent = 'Inserting rows...';
+        try {
+          const response = await fetch(`${API_BASE_URL}/insert`, { method: 'POST' });
+          const result = await response.json();
+          insertResponse.textContent = JSON.stringify(result, null, 2);
+        } catch (error) {
+          insertResponse.textContent = `Request failed: ${error.message}`;
+        }
+      });
+
+      queryButton.addEventListener('click', async () => {
+        queryResponse.textContent = 'Running query...';
+        try {
+          const sql = sqlInput.value.trim();
+          if (!sql) {
+            queryResponse.textContent = 'Enter a SQL query to run.';
+            return;
+          }
+
+          const parameters = new URLSearchParams({ sql });
+          const response = await fetch(`${API_BASE_URL}/query?${parameters.toString()}`);
+          const result = await response.json();
+          queryResponse.textContent = JSON.stringify(result, null, 2);
+        } catch (error) {
+          queryResponse.textContent = `Request failed: ${error.message}`;
+        }
+      });
+    </script>
+  </body>
+</html>
