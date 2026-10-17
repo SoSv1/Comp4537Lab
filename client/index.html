@@ -51,7 +51,7 @@
     <section aria-labelledby="query-heading">
       <h2 id="query-heading">Read table data</h2>
       <label for="sql-query">SQL query (read-only)</label>
-      <textarea id="sql-query">SELECT * FROM records;</textarea>
+      <textarea id="sql-query">SELECT * FROM patient</textarea>
       <button id="query-button" type="button">Submit query</button>
       <pre id="query-response" aria-live="polite">No query submitted yet.</pre>
     </section>
@@ -67,7 +67,7 @@
       insertButton.addEventListener('click', async () => {
         insertResponse.textContent = 'Inserting rows...';
         try {
-          const response = await fetch(`${API_BASE_URL}/insert`, { method: 'POST' });
+          const response = await fetch(`${API_BASE_URL}/api/v1/patients`, { method: 'POST' });
           const result = await response.json();
           insertResponse.textContent = JSON.stringify(result, null, 2);
         } catch (error) {
@@ -84,8 +84,9 @@
             return;
           }
 
-          const parameters = new URLSearchParams({ sql });
-          const response = await fetch(`${API_BASE_URL}/query?${parameters.toString()}`);
+          const response = await fetch(
+            `${API_BASE_URL}/api/v1/sql/${encodeURIComponent(sql)}`
+          );
           const result = await response.json();
           queryResponse.textContent = JSON.stringify(result, null, 2);
         } catch (error) {
