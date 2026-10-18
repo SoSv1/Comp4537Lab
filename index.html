@@ -1,29 +1,32 @@
+
 <!doctype html>
+<!-- ChatGPT was used to help write this code. -->
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Server 1 — Database</title>
+    <title></title>
     <link rel="stylesheet" href="css/style.css">
-  </head>
-  <body>
-    <h1>Server 1 — Database</h1>
+</head>
+<body>
+    <h1 id="page-heading"></h1>
 
     <section aria-labelledby="insert-heading">
-      <h2 id="insert-heading">Insert rows</h2>
-      <p>Each click inserts the sample rows again; existing rows are kept.</p>
-      <button id="insert-button" type="button">Insert</button>
-      <pre id="insert-response" aria-live="polite">No insert request yet.</pre>
+        <h2 id="insert-heading"></h2>
+        <p id="insert-description"></p>
+        <button id="insert-button" type="button"></button>
+        <pre id="insert-response" aria-live="polite"></pre>
     </section>
 
     <section aria-labelledby="query-heading">
-      <h2 id="query-heading">Read table data</h2>
-      <label for="sql-query">SQL query (read-only)</label>
-      <textarea id="sql-query">SELECT * FROM patient</textarea>
-      <button id="query-button" type="button">Submit query</button>
-      <pre id="query-response" aria-live="polite">No query submitted yet.</pre>
+        <h2 id="query-heading"></h2>
+        <label id="query-label" for="sql-query"></label>
+        <textarea id="sql-query"></textarea>
+        <button id="query-button" type="button"></button>
+        <pre id="query-response" aria-live="polite"></pre>
     </section>
 
+    <script src="lang/en/strings.js"></script>
     <script src="script/script.js"></script>
-  </body>
+</body>
 </html>
